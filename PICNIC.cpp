@@ -7,28 +7,30 @@ int N, M;
 bool areFriends[MAX][MAX];
 // taken[i]: i번째 학생이 짝을 찾았다면 true, 아니면 false
 int countPairings(bool taken[MAX]) {
-	// 모든 학생이 짝을 찾았으면 한가지 경우를 찾았으니 종료한다
-	bool finished = true;
-	for (int i = 0; i < N; ++i)
-		if (!taken[i]) finished = false;
-	if (finished) return 1;
-	
-	int ret = 0;
-	// 서로 친구인 두 학생을 찾아 짝짓는다
+	int firstFree = -1;
 	for (int i = 0; i < N; ++i) {
-		for (int j = 0; j < N; ++j) {
-			//
-			if (!taken[i] && !taken[j] && areFriends[i][j]) {
-				taken[i] = taken[j] = true;
-				ret += countPairings(taken);
-				taken[i] = taken[j] = false;
-			}
+		if (!taken[i]) {
+			firstFree = i;
+			break;
+		}
+	}
+	// 모든 학생이 짝을 찾았으면 한 가지 방법을 찾았으니 종료한다
+	if (firstFree == -1) return 1;
+	int ret = 0;
+	// 이 학생과 짝지을 학생을 결정한다.
+	for (int pairWith = firstFree + 1; pairWith < N; ++pairWith) {
+		if (!taken[pairWith] && areFriends[firstFree][pairWith]) {
+			taken[firstFree] = taken[pairWith] = true;
+			ret += countPairings(taken);
+			taken[firstFree] = taken[pairWith] = false;
 		}
 	}
 	return ret;
 }
 
 int main() {
+	freopen("input.txt", "r", stdin);
+
 	int testcase; scanf("%d", &testcase);
 	while (testcase--) {
 		scanf("%d %d", &N, &M); // 학생 수, 친구 쌍의 수
