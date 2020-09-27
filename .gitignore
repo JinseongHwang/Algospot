@@ -4,3 +4,5 @@ ALGOSPOT.vcxproj
 ALGOSPOT.vcxproj.filters
 ALGOSPOT.vcxproj.user
 Debug/
+test.cpp
+input.txt
